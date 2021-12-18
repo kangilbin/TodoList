@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 public class DemoModel {
 	
 	@NonNull
-	private String idd;
+	private String id;
 }
  
