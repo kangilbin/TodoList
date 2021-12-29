@@ -18,7 +18,7 @@ public class TodoService {
 	@Autowired
 	private TodoRespository repository;
 	
-	// 저장
+	// insert
 	public List<TodoEntity> create(final TodoEntity entity){
 		// Validations
 		validate(entity);
@@ -29,13 +29,13 @@ public class TodoService {
 		
 		return repository.findByUserId(entity.getUserId());
 	}
-	// 검색
+	// select
 	public List<TodoEntity> retrieve(final String userId){
 		log.info("Entity userId : {} is find.", userId);
-		return repository.findByUserId(userId);
+		return repository.findByUserId(userId);				
 		
 	}
-	// 업데이트
+	// update
 	public List<TodoEntity> update(final TodoEntity entity){
 		// (1) 저장할 엔티티가 유효한지 확인한다.
 		validate(entity);
@@ -52,6 +52,23 @@ public class TodoService {
 			repository.save(todo);
 		});
 		// Retrieve Todo에서 만든 메서드를 이용해 사용자의 모든 Todo 리스트를 리턴한다.
+		return retrieve(entity.getUserId());
+	}
+	// delete
+	public List<TodoEntity> delete(final TodoEntity entity){
+		// (1) 저장할 엔티티가 유효한지 확인한다.
+		validate(entity);
+		try {
+			// (2) 엔티티를 삭제한다.
+			repository.delete(entity);
+		} catch(Exception e) {
+			// (3) exception 발생 시 id와 exception를 로깅한다
+			log.error("error deleting entity ", entity.getId(), e);
+			
+			// (4) 컨트롤러로 exception을 보낸다. 데이터베이스 내부 로직을 캡슐화하려면 e를 리턴하지 않고 새 exception 오브젝트를 리턴한다.
+			throw new RuntimeException("error deleteing entity " + entity.getId());
+		}
+		// (5) 새 Todo 리스트를 가져와 리턴한다.
 		return retrieve(entity.getUserId());
 	}
 	// 리팩토링하나 메서드
