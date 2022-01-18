@@ -47,7 +47,7 @@ public class UserController {
 					.username(registeredUser.getUsername())
 					.build();
 					
-			return ResponseEntity.ok().body(responseUserDTO);
+			return ResponseEntity.ok().body(responseUserDTO);s
 		} catch (Exception e) {
 			// 사용자 정보는 항상 하나이므로 리스트로 만들어야 하는 ResponseDTO를 사용하지 않고 그냥 UserDTO 리턴
 			
